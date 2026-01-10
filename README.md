@@ -51,17 +51,3 @@ npm run test
 ```
 npm run test:watch
 ```
-
-## Configurações adicionais
-
-### VSCode
-
-File: `(Settings) /User/settings.json`
-
-```
-{
-  "files.autoSave": "off",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
-}
-```

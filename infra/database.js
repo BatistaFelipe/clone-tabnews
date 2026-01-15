@@ -1,5 +1,3 @@
-// new commit to force vercel create a preview
-
 import { Client } from "pg";
 
 const query = async (queryObject) => {

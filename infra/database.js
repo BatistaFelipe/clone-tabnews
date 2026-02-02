@@ -1,20 +1,24 @@
 import { Client } from "pg";
+import { ServiceError } from "./errors.js";
 
-const query = async (queryObject) => {
+async function query(queryObject) {
   let client;
   try {
     client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    console.error(error);
-    throw error;
+    const serviceError = new ServiceError({
+      message: "Erro na conexão com o DB ou na Query.",
+      cause: error,
+    });
+    throw serviceError;
   } finally {
     await client?.end();
   }
-};
+}
 
-const getNewClient = async () => {
+async function getNewClient() {
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
@@ -25,7 +29,8 @@ const getNewClient = async () => {
   });
   await client.connect();
   return client;
-};
+}
+
 const database = {
   query,
   getNewClient,
@@ -33,10 +38,10 @@ const database = {
 
 export default database;
 
-const getSSLValues = () => {
+function getSSLValues() {
   if (process.env.POSTGRES_CA) {
     return { ca: process.env.POSTGRES_CA };
   }
 
   return process.env.NODE_ENV === "production" ? true : false;
-};
+}

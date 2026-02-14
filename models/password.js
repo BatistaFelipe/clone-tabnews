@@ -1,6 +1,13 @@
 import bcryptjs from "bcryptjs";
+import { ValidationError } from "infra/errors.js";
 
 async function hash(password) {
+  if (!password) {
+    throw new ValidationError({
+      message: "A senha de usuário é obritória.",
+      action: "Informe a senha de usuário para realizar esta operação.",
+    });
+  }
   const rounds = getNumberOfRounds();
   const pepper = getPepper();
   return await bcryptjs.hash(password + pepper, rounds);

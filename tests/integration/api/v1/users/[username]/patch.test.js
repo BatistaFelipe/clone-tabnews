@@ -108,8 +108,13 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(response.status).toBe(200);
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        ...responseBody,
+        id: responseBody.id,
         username: "uniqueUser2",
+        email: responseBody.email,
+        features: ["read:activation_token"],
+        password: responseBody.password,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
 
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
@@ -134,8 +139,13 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(response.status).toBe(200);
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        ...responseBody,
+        id: responseBody.id,
+        username: responseBody.username,
         email: "uniqueEmail2@felipebatista.dev",
+        features: ["read:activation_token"],
+        password: responseBody.password,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
 
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);

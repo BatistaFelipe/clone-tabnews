@@ -14,6 +14,7 @@ Projeto baseado no repositório do professor Filipe Deschamps: [filipedeschamps/
 ### Desenvolvimento
 
 1. Instale as dependências:
+
    ```bash
    npm install
    ```
@@ -26,6 +27,7 @@ Projeto baseado no repositório do professor Filipe Deschamps: [filipedeschamps/
 ## 🧪 Testes
 
 Para rodar os testes:
+
 ```bash
 npm run test
 ```

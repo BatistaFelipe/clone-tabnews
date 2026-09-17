@@ -1,53 +1,33 @@
-# clone-tabnews
+# Clone TabNews
 
-Recriar o site do tabnews.com.br para o curso.dev
+Uma implementação do [TabNews](https://www.tabnews.com.br) construída como projeto prático do [curso.dev](https://curso.dev).
 
-## Scripts
+Projeto baseado no repositório do professor Filipe Deschamps: [filipedeschamps/clone-tabnews](https://github.com/filipedeschamps/clone-tabnews).
 
-- Executar em modo desenvolvimento:
+## 🚀 Como Executar
 
-```
-npm run dev
-```
+### Pré-requisitos
 
-- Criar e executar o container do banco de dados (local):
+- Node.js
+- Docker e Docker Compose
 
-```
-npm run services:up
-```
+### Desenvolvimento
 
-- Parar a execução do container do banco de dados (local):
+1. Instale as dependências:
 
-```
-npm run services:stop
-```
+   ```bash
+   npm install
+   ```
 
-- Parar e remover o container do banco de dados (local):
+2. Execute o servidor em ambiente de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
 
-```
-npm run services:down
-```
+## 🧪 Testes
 
-- Verificar se os arquivos estão com a formatação padrão:
+Para rodar os testes:
 
-```
-npm run lint:check
-```
-
-- Aplicar a formatação padrão nos arquivos:
-
-```
-npm run lint:fix
-```
-
-- Executar os testes unitários:
-
-```
+```bash
 npm run test
-```
-
-- Executar os testes unitários em watch mode:
-
-```
-npm run test:watch
 ```

@@ -9,9 +9,9 @@ async function findOneById(id) {
   async function runSelectQuery(id) {
     const result = await database.query({
       text: `
-      SELECT 
-        * 
-      FROM 
+      SELECT
+        *
+      FROM
         users
       WHERE
         id = $1
@@ -39,9 +39,9 @@ async function findOneByUsername(username) {
   async function runSelectQuery(username) {
     const result = await database.query({
       text: `
-      SELECT 
-        * 
-      FROM 
+      SELECT
+        *
+      FROM
         users
       WHERE
         LOWER(username) = LOWER($1)
@@ -69,9 +69,9 @@ async function findOneByEmail(email) {
   async function runSelectQuery(email) {
     const result = await database.query({
       text: `
-      SELECT 
-        * 
-      FROM 
+      SELECT
+        *
+      FROM
         users
       WHERE
         LOWER(email) = LOWER($1)
@@ -96,6 +96,7 @@ async function create(userInputValues) {
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
   await hashPasswordInObject(userInputValues);
+  injectDefaultFeaturesInObject(userInputValues);
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
@@ -103,10 +104,10 @@ async function create(userInputValues) {
   async function runInsertQuery(userInputValues) {
     const result = await database.query({
       text: `
-      INSERT INTO 
-        users (username, email, password) 
-      VALUES 
-        ($1, $2, $3)
+      INSERT INTO
+        users (username, email, password, features)
+      VALUES
+        ($1, $2, $3, $4)
       RETURNING
         *
     `,
@@ -114,10 +115,15 @@ async function create(userInputValues) {
         userInputValues.username,
         userInputValues.email,
         userInputValues.password,
+        userInputValues.features,
       ],
     });
 
     return result.rows[0];
+  }
+
+  function injectDefaultFeaturesInObject(userInputValues) {
+    userInputValues.features = ["read:activation_token"];
   }
 }
 
@@ -169,9 +175,9 @@ async function update(username, userInputValues) {
 async function validateUniqueEmail(email) {
   const result = await database.query({
     text: `
-      SELECT 
-        email 
-      FROM 
+      SELECT
+        email
+      FROM
         users
       WHERE
         LOWER(email) = LOWER($1)
@@ -190,9 +196,9 @@ async function validateUniqueEmail(email) {
 async function validateUniqueUsername(username) {
   const result = await database.query({
     text: `
-      SELECT 
-        username 
-      FROM 
+      SELECT
+        username
+      FROM
         users
       WHERE
         LOWER(username) = LOWER($1)
@@ -213,12 +219,37 @@ async function hashPasswordInObject(userInputValues) {
   userInputValues.password = hashedPassword;
 }
 
+async function setFeatures(userId, features) {
+  const updatedUser = await runUpdateQuery(userId, features);
+  return updatedUser;
+
+  async function runUpdateQuery(userId, features) {
+    const results = await database.query({
+      text: `
+      UPDATE
+        users
+      SET
+        features = $2,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+        *
+      ;`,
+      values: [userId, features],
+    });
+
+    return results.rows[0];
+  }
+}
+
 const user = {
   create,
   findOneById,
   findOneByUsername,
   findOneByEmail,
   update,
+  setFeatures,
 };
 
 export default user;

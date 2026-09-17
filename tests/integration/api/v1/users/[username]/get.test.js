@@ -23,8 +23,13 @@ describe("GET /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        ...responseBody,
+        id: responseBody.id,
         username: "CaseMatch",
+        email: responseBody.email,
+        features: ["read:activation_token"],
+        password: responseBody.password,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
 
       expect(uuidVersion(responseBody.id)).toEqual(4);
@@ -46,8 +51,13 @@ describe("GET /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        ...responseBody,
+        id: responseBody.id,
         username: "MismatchCase",
+        email: responseBody.email,
+        features: ["read:activation_token"],
+        password: responseBody.password,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
 
       expect(uuidVersion(responseBody.id)).toEqual(4);
